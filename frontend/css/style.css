@@ -47,6 +47,31 @@
   --cat-other-text: #6d28d9;
   --cat-other-border: #ddd6fe;
 
+  /* ---------- Charts (Chart.js) ---------- */
+
+  --chart-font-family: "Plus Jakarta Sans", sans-serif;
+  --chart-mono-family: "JetBrains Mono", monospace;
+
+  --chart-text-color: #475569;
+  --chart-legend-text: #475569;
+  --chart-axis-text: #94a3b8;
+  --chart-grid-color: #f1f5f9;
+
+  --chart-border-color: #ffffff;
+  --chart-tooltip-bg: #0f172a;
+  --chart-tooltip-border: transparent;
+
+  --chart-color-food: #10b981;
+  --chart-color-transport: #06b6d4;
+  --chart-color-bills: #f59e0b;
+  --chart-color-entertainment: #ec4899;
+  --chart-color-other: #8b5cf6;
+
+  --chart-line-color: #4f46e5;
+  --chart-line-fill-start: rgba(79, 70, 229, 0.35);
+  --chart-line-fill-end: rgba(79, 70, 229, 0);
+  --chart-point-bg: #ffffff;
+
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
   --shadow-md:
@@ -80,6 +105,22 @@ body.dark-mode {
   --brand-primary: #818cf8;
   --brand-primary-hover: #6366f1;
   --brand-glow: rgba(129, 140, 248, 0.2);
+
+  /* ---------- Charts (Chart.js) — dark overrides ---------- */
+
+  --chart-text-color: #94a3b8;
+  --chart-legend-text: #e2e8f0;
+  --chart-axis-text: #94a3b8;
+  --chart-grid-color: rgba(255, 255, 255, 0.06);
+
+  --chart-border-color: #1e293b;
+  --chart-tooltip-bg: #020617;
+  --chart-tooltip-border: #334155;
+
+  --chart-line-color: #818cf8;
+  --chart-line-fill-start: rgba(129, 140, 248, 0.3);
+  --chart-line-fill-end: rgba(129, 140, 248, 0);
+  --chart-point-bg: #1e293b;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
 
@@ -827,7 +868,7 @@ body.dark-mode .form-select option {
 
   border-color: var(--surface-border) !important;
 
-  background-color: #ffffff !important;
+  background-color: var(--surface-card) !important;
 
   border-radius: var(--border-radius-md) !important;
 
@@ -836,12 +877,6 @@ body.dark-mode .form-select option {
   font-size: 0.875rem;
 
   transition: all 0.2s ease;
-}
-
-body.dark-mode .btn-outline-secondary {
-  background-color: #1e293b !important;
-
-  color: var(--text-secondary) !important;
 }
 
 .btn-outline-secondary:hover {
@@ -1240,19 +1275,15 @@ body.dark-mode .table-spinner-overlay {
 }
 
 .modal-content {
-  background-color: #ffffff !important;
+  background-color: var(--surface-card) !important;
+
+  color: var(--text-primary);
 
   border: 1px solid var(--surface-border) !important;
 
   border-radius: var(--border-radius-xl) !important;
 
   box-shadow: var(--shadow-lg);
-}
-
-body.dark-mode .modal-content {
-  background-color: #1e293b !important;
-
-  color: var(--text-primary);
 }
 
 .modal-header,

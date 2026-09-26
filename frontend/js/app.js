@@ -502,18 +502,27 @@ function renderCharts(allExpenses, filteredList) {
     monthlyChart.destroy();
   }
 
+  const isDark = document.body.classList.contains("dark-mode");
+
+  const chartTextColor = isDark ? "#cbd5e1" : "#475569";
+  const chartGridColor = isDark ? "#334155" : "#f1f5f9";
+  const chartBorderColor = isDark ? "#1e293b" : "#ffffff";
+
   Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
-  Chart.defaults.color = "#64748b";
+  Chart.defaults.color = chartTextColor;
 
   const categoryCanvas = document.getElementById("category-chart");
 
   categoryChart = new Chart(categoryCanvas, {
     type: "doughnut",
+
     data: {
       labels: Object.keys(categoryTotals),
+
       datasets: [
         {
           data: Object.values(categoryTotals),
+
           backgroundColor: [
             "#10b981",
             "#06b6d4",
@@ -521,47 +530,68 @@ function renderCharts(allExpenses, filteredList) {
             "#ec4899",
             "#8b5cf6",
           ],
+
           borderWidth: 2,
-          borderColor: "#ffffff",
+          borderColor: chartBorderColor,
           hoverOffset: 6,
           borderRadius: 4,
         },
       ],
     },
+
     options: {
       responsive: true,
       maintainAspectRatio: false,
       cutout: "72%",
+
       plugins: {
         legend: {
           position: "bottom",
+
           labels: {
             usePointStyle: true,
             pointStyle: "circle",
             padding: 20,
+
             font: {
               size: 12,
               weight: "600",
             },
-            color: "#475569",
+
+            color: chartTextColor,
           },
         },
+
         tooltip: {
-          backgroundColor: "#0f172a",
-          titleFont: { size: 13, weight: "700" },
-          bodyFont: { size: 12, family: "'JetBrains Mono', monospace" },
+          backgroundColor: isDark ? "#0f172a" : "#0f172a",
+
+          titleFont: {
+            size: 13,
+            weight: "700",
+          },
+
+          bodyFont: {
+            size: 12,
+            family: "'JetBrains Mono', monospace",
+          },
+
           padding: 12,
           cornerRadius: 10,
           displayColors: true,
           boxPadding: 6,
+
           callbacks: {
             label: function (context) {
               const value = context.raw || 0;
-              return `  \({context.label}:\)${value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+
+              return `  ${context.label}: ${value.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+              })}`;
             },
           },
         },
       },
+
       animation: {
         animateScale: true,
         animateRotate: true,
@@ -575,86 +605,126 @@ function renderCharts(allExpenses, filteredList) {
   const monthlyCtx = monthlyCanvas.getContext("2d");
 
   const brandGradient = monthlyCtx.createLinearGradient(0, 0, 0, 300);
-  brandGradient.addColorStop(0, "rgba(79, 70, 229, 0.35)");
+
+  brandGradient.addColorStop(
+    0,
+    isDark ? "rgba(129, 140, 248, 0.35)" : "rgba(79, 70, 229, 0.35)",
+  );
+
   brandGradient.addColorStop(1, "rgba(79, 70, 229, 0.0)");
 
   monthlyChart = new Chart(monthlyCtx, {
     type: "line",
+
     data: {
       labels: Object.keys(monthlyTotals),
+
       datasets: [
         {
           label: "Expenses",
           data: Object.values(monthlyTotals),
+
           tension: 0.4,
           fill: true,
+
           backgroundColor: brandGradient,
-          borderColor: "#4f46e5",
+          borderColor: isDark ? "#818cf8" : "#4f46e5",
+
           borderWidth: 3,
-          pointBackgroundColor: "#ffffff",
-          pointBorderColor: "#4f46e5",
+
+          pointBackgroundColor: isDark ? "#1e293b" : "#ffffff",
+          pointBorderColor: isDark ? "#818cf8" : "#4f46e5",
+
           pointBorderWidth: 2,
           pointRadius: 4,
           pointHoverRadius: 7,
-          pointHoverBackgroundColor: "#4f46e5",
-          pointHoverBorderColor: "#ffffff",
+
+          pointHoverBackgroundColor: isDark ? "#818cf8" : "#4f46e5",
+          pointHoverBorderColor: isDark ? "#1e293b" : "#ffffff",
+
           pointHoverBorderWidth: 3,
         },
       ],
     },
+
     options: {
       responsive: true,
       maintainAspectRatio: false,
+
       interaction: {
         intersect: false,
         mode: "index",
       },
+
       scales: {
         x: {
           grid: {
             display: false,
           },
+
           ticks: {
-            font: { size: 11, weight: "500" },
+            font: {
+              size: 11,
+              weight: "500",
+            },
+
             color: "#94a3b8",
           },
         },
+
         y: {
           beginAtZero: true,
+
           grid: {
-            color: "#f1f5f9",
+            color: chartGridColor,
             drawBorder: false,
           },
+
           ticks: {
-            font: { size: 11, family: "'JetBrains Mono', monospace" },
+            font: {
+              size: 11,
+              family: "'JetBrains Mono', monospace",
+            },
+
             color: "#94a3b8",
+
             callback: function (value) {
               return "$" + value;
             },
           },
         },
       },
+
       plugins: {
         legend: {
           display: false,
         },
+
         tooltip: {
           backgroundColor: "#0f172a",
-          titleFont: { size: 13, weight: "700" },
-          bodyFont: { size: 12, family: "'JetBrains Mono', monospace" },
+
+          titleFont: {
+            size: 13,
+            weight: "700",
+          },
+
+          bodyFont: {
+            size: 12,
+            family: "'JetBrains Mono', monospace",
+          },
+
           padding: 12,
           cornerRadius: 10,
           displayColors: false,
+
           callbacks: {
             label: function (context) {
-              return ` Expenses: $${context.parsed.y.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+              return ` Expenses: $${context.parsed.y.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+              })}`;
             },
           },
         },
-      },
-      animation: {
-        duration: 1200,
-        easing: "easeOutQuart",
       },
     },
   });
@@ -815,7 +885,10 @@ editForm.addEventListener("submit", async (e) => {
 
 toggleBtn.addEventListener("click", () => {
   const isDark = document.body.classList.toggle("dark-mode");
+
   toggleBtn.setAttribute("aria-pressed", isDark);
+
+  renderCharts(expenses, filterList());
 });
 
 errorAlertClose.addEventListener("click", hideAlertError);
