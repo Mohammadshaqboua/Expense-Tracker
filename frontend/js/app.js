@@ -48,6 +48,10 @@ const filterCategory = document.getElementById("filter-category");
 const searchTitle = document.getElementById("search-title");
 const filterMonth = document.getElementById("filter-month");
 
+const expensesSpinnerOverlay = document.getElementById(
+  "expenses-spinner-overlay",
+);
+
 const expensesBody = document.getElementById("expenses-body");
 const expensesTableHead = document.querySelector(".expenses-table thead");
 
@@ -146,10 +150,13 @@ async function refresh() {
 
     const filteredList = applyFilter();
 
+    renderTable(filteredList);
     renderCharts(expenses, filteredList);
   } catch (error) {
     showAlertError(error.message);
     renderTable([], "Failed to load expenses.");
+  } finally {
+    hideTableLoading();
   }
 }
 
@@ -181,17 +188,11 @@ function showSuccessToast(message) {
 }
 
 function showTableLoading() {
-  expensesBody.innerHTML = `
-    <tr>
-      <td colspan="5" class="text-center" style="height: 300px;">
-        <div class="d-flex justify-content-center align-items-center h-100">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      </td>
-    </tr>
-  `;
+  expensesSpinnerOverlay.classList.add("is-visible");
+}
+
+function hideTableLoading() {
+  expensesSpinnerOverlay.classList.remove("is-visible");
 }
 
 function validateForm(fields) {
@@ -788,12 +789,13 @@ expenseForm.addEventListener("submit", async (e) => {
 
     expenseForm.reset();
     setTodayDate();
+
+    showSuccessToast("Expense added successfully.");
   } catch (error) {
     showAlertError(error.message);
   } finally {
     addExpenseBtn.disabled = false;
     spinnerBtn.classList.add("d-none");
-    showSuccessToast("Expense added successfully.");
   }
 });
 
@@ -874,12 +876,13 @@ editForm.addEventListener("submit", async (e) => {
     bootstrap.Modal.getOrCreateInstance(editModal).hide();
 
     await refresh();
+
+    showSuccessToast("Expense updated successfully.");
   } catch (error) {
     showAlertError(error.message);
   } finally {
     saveChangesBtn.disabled = false;
     spinnerBtn.classList.add("d-none");
-    showSuccessToast("Expense updated successfully.");
   }
 });
 
