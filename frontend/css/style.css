@@ -889,6 +889,34 @@ body.dark-mode .form-select option {
   transform: translateY(-1px);
 }
 
+#export-csv-btn:hover,
+.filter-toggle-btn:hover {
+  background-color: var(--brand-glow) !important;
+
+  color: var(--brand-primary) !important;
+
+  border-color: var(--brand-primary) !important;
+}
+
+#export-csv-btn:active,
+.filter-toggle-btn:active {
+  background-color: var(--brand-primary) !important;
+
+  color: #ffffff !important;
+
+  border-color: var(--brand-primary) !important;
+
+  transform: translateY(0);
+}
+
+.filter-toggle-btn[aria-expanded="true"] {
+  background-color: var(--brand-primary) !important;
+
+  color: #ffffff !important;
+
+  border-color: var(--brand-primary) !important;
+}
+
 /* ==========================================================================
    EXPENSES TABLE
 ========================================================================== */
@@ -923,6 +951,48 @@ body.dark-mode .form-select option {
 
 .expenses-title-row .form-heading {
   margin: 0;
+}
+
+.expenses-title-row-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.5rem;
+}
+
+#export-csv-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.4rem;
+}
+
+.btn-icon {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.btn-icon svg {
+  display: block;
+}
+
+.filter-toggle-btn {
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  line-height: 1;
+}
+
+.filters {
+  display: flex;
 }
 
 .filter {
@@ -1362,10 +1432,52 @@ body.dark-mode .table-spinner-overlay {
     justify-content: space-between;
   }
 
-  .filter {
-    width: 100%;
+  #export-csv-btn,
+  .filter-toggle-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 2.1rem;
+
+    height: 2.1rem;
+
+    padding: 0;
+
+    font-size: 0.95rem;
   }
 
+  #export-csv-btn .btn-text {
+    display: none;
+  }
+
+  .filters {
+    display: none;
+
+    margin-top: 0.5rem;
+  }
+
+  .filters.show {
+    display: flex;
+  }
+
+  .filter {
+    width: 100%;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 0.3rem;
+  }
+
+  .filter-label {
+    width: auto;
+  }
+
+  .filter input,
   .filter select {
     width: 100%;
   }

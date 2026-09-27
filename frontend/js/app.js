@@ -43,6 +43,8 @@ const addExpenseBtn = document.getElementById("add-expense-btn");
 const spinnerBtn = document.getElementById("add-expense-spinner");
 
 const exportCsvBtn = document.getElementById("export-csv-btn");
+const filterToggleBtn = document.getElementById("filter-toggle-btn");
+const filtersPanel = document.getElementById("filters-panel");
 
 const filterCategory = document.getElementById("filter-category");
 const searchTitle = document.getElementById("search-title");
@@ -892,6 +894,11 @@ toggleBtn.addEventListener("click", () => {
   toggleBtn.setAttribute("aria-pressed", isDark);
 
   renderCharts(expenses, filterList());
+});
+
+filterToggleBtn.addEventListener("click", () => {
+  const isOpen = filtersPanel.classList.toggle("show");
+  filterToggleBtn.setAttribute("aria-expanded", String(isOpen));
 });
 
 errorAlertClose.addEventListener("click", hideAlertError);

@@ -2,6 +2,39 @@
 
 A simple web app for tracking expenses: add an expense (title, amount, category, date), edit or delete it, and see a summary plus charts of your spending by category and by month. The frontend is plain HTML/CSS/JS, and the backend is an Express.js API connected to a PostgreSQL database.
 
+## Recent updates
+
+Mobile UI improvements to the Expenses section (`frontend/index.html`, `frontend/css/style.css`, `frontend/js/app.js`):
+
+- **Collapsible filters on mobile** — the Search / Month / Category filters are now hidden by default on small screens and open with a dedicated filter (funnel) button, instead of always taking up screen space.
+- **Icon-only action buttons on mobile** — "Export CSV" and the new filter toggle are now compact, same-sized square icon buttons on mobile (professional inline SVG icons: download tray + funnel), with the "Export CSV" label still shown in full on desktop.
+- **Fixed a Bootstrap conflict** — removed the `d-flex` utility class from the filters container, since its `!important` was overriding the `display: none` used to hide the filters panel on mobile.
+- **Consistent, aligned filter fields** — on mobile, each filter's label now sits above its input/select (instead of beside it), and every field is a uniform 100% width, so the Search, Month, and Category boxes all line up with the same left/right edges.
+- **Branded hover/active states** — the Export CSV and filter toggle buttons now use the app's purple brand color (`--brand-primary`) on hover and on click/active, and the filter button stays highlighted purple while the filters panel is open, so its state is clear at a glance.
+
+## Project structure
+
+```text
+Expense-Tracker-main/
+├── README.md
+├── .gitignore
+├── backend/
+│   ├── server.js          # Express API (routes for /api/expenses)
+│   ├── schema.sql         # PostgreSQL table definition + sample data
+│   ├── package.json
+│   └── package-lock.json
+├── frontend/
+│   ├── index.html         # App markup (form, expenses table, filters, modals)
+│   ├── css/
+│   │   └── style.css      # Styling, theming (light/dark), responsive rules
+│   └── js/
+│       └── app.js         # API calls, rendering, filters/sort, charts, CSV export
+└── screenshots/
+    ├── home-desktop-light.png
+    ├── home-desktop-dark.png
+    └── mobile-view-dark.png
+```
+
 ## Project architecture
 
 ```mermaid
