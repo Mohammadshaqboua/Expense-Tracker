@@ -1,137 +1,419 @@
 # Expense Tracker
 
-A simple web app for tracking expenses: add an expense (title, amount, category, date), edit or delete it, and see a summary plus charts of your spending by category and by month. The frontend is plain HTML/CSS/JS, and the backend is an Express.js API connected to a PostgreSQL database.
+A full-stack web application for managing, analyzing, and organizing personal expenses.
 
-## Recent updates
+The application provides a responsive interface for creating, editing, deleting, filtering, sorting, and exporting expenses. It also includes spending summaries, interactive charts, and light/dark themes.
 
-Mobile UI improvements to the Expenses section (`frontend/index.html`, `frontend/css/style.css`, `frontend/js/app.js`):
+Built with **HTML, CSS, JavaScript, Bootstrap, Node.js, Express.js, and PostgreSQL**.
 
-- **Collapsible filters on mobile** — the Search / Month / Category filters are now hidden by default on small screens and open with a dedicated filter (funnel) button, instead of always taking up screen space.
-- **Icon-only action buttons on mobile** — "Export CSV" and the new filter toggle are now compact, same-sized square icon buttons on mobile (professional inline SVG icons: download tray + funnel), with the "Export CSV" label still shown in full on desktop.
-- **Fixed a Bootstrap conflict** — removed the `d-flex` utility class from the filters container, since its `!important` was overriding the `display: none` used to hide the filters panel on mobile.
-- **Consistent, aligned filter fields** — on mobile, each filter's label now sits above its input/select (instead of beside it), and every field is a uniform 100% width, so the Search, Month, and Category boxes all line up with the same left/right edges.
-- **Branded hover/active states** — the Export CSV and filter toggle buttons now use the app's purple brand color (`--brand-primary`) on hover and on click/active, and the filter button stays highlighted purple while the filters panel is open, so its state is clear at a glance.
+---
 
-## Project structure
+## Overview
+
+Expense Tracker is designed as a practical full-stack application that connects a responsive frontend to a RESTful backend API and a PostgreSQL database.
+
+Users can:
+
+* Create and manage expenses
+* Validate expense data on both client and server
+* Filter and sort expenses
+* Analyze spending through summary cards and charts
+* Export expense data as CSV
+* Switch between light and dark themes
+* Use the application comfortably across desktop and mobile devices
+
+---
+
+## Features
+
+### Expense Management
+
+* Add new expenses
+* Edit existing expenses
+* Delete expenses with confirmation
+* View all stored expenses
+* Automatic database persistence
+
+### Validation
+
+* Client-side form validation
+* Server-side validation
+* Positive amount validation
+* Title length validation
+* Category validation
+* Date format validation
+* Invalid ID handling
+* Proper HTTP status codes and error responses
+
+### Filtering & Sorting
+
+* Search expenses by title
+* Filter by month
+* Filter by category
+* Sort by:
+
+  * Title
+  * Amount
+  * Category
+  * Date
+
+### Dashboard & Analytics
+
+* Total spending
+* Number of expenses
+* Highest expense
+* Spending by category
+* Spending over time
+
+Charts are rendered dynamically using **Chart.js**.
+
+### Data Export
+
+* Export expenses to CSV
+* Automatically generated CSV filename based on the current date
+* Exported data respects the currently displayed expense list
+
+### UI & Responsive Design
+
+* Responsive desktop and mobile layouts
+* Bootstrap-based components and utilities
+* Custom application styling
+* Light/Dark mode
+* Responsive expense management section
+* Mobile-specific filter interaction
+* Accessible form controls and feedback messages
+
+---
+
+## Recent Updates
+
+### Mobile Expenses UI Improvements
+
+The Expenses section has been redesigned for smaller screens to improve usability, reduce visual clutter, and make the available actions easier to access.
+
+#### Collapsible Mobile Filters
+
+Search, Month, and Category filters are now hidden by default on small screens.
+
+A dedicated filter button allows users to expand and collapse the filters when needed, keeping the Expenses section compact while preserving all filtering functionality.
+
+#### Compact Mobile Actions
+
+The **Export CSV** and filter controls now use compact square icon buttons on mobile.
+
+* Export CSV uses a download icon
+* Filter toggle uses a funnel icon
+* Both controls share the same dimensions and visual treatment
+* The full **Export CSV** text remains visible on desktop screens
+
+#### Bootstrap Display Conflict Fix
+
+Removed the Bootstrap `d-flex` utility class from the filters container.
+
+The utility class applies `display: flex !important`, which conflicted with the custom mobile rule responsible for hiding the filter panel.
+
+Removing the conflicting utility allows the responsive CSS to control the filter panel correctly.
+
+#### Consistent Mobile Filter Layout
+
+Mobile filter controls were updated so that:
+
+* Labels appear above their controls
+* Search, Month, and Category fields use the same width
+* All controls align consistently
+* The filter section uses the available mobile width more effectively
+
+#### Improved Interaction States
+
+The Export CSV and filter buttons now use the application's `--brand-primary` color for hover and active states.
+
+The filter toggle remains highlighted while the filter panel is open, providing a clear visual indication of its current state.
+
+---
+
+## Tech Stack
+
+### Frontend
+
+| Technology  | Purpose                                 |
+| ----------- | --------------------------------------- |
+| HTML5       | Application structure                   |
+| CSS3        | Custom styling and responsive design    |
+| JavaScript  | Application logic and API communication |
+| Bootstrap 5 | Responsive layout and UI utilities      |
+| Chart.js    | Data visualization                      |
+| SVG         | Interface icons                         |
+
+### Backend
+
+| Technology           | Purpose                        |
+| -------------------- | ------------------------------ |
+| Node.js              | JavaScript runtime             |
+| Express.js           | REST API                       |
+| PostgreSQL           | Relational database            |
+| node-postgres (`pg`) | PostgreSQL database connection |
+| CORS                 | Cross-origin communication     |
+| dotenv               | Environment configuration      |
+
+---
+
+## Architecture
+
+The application follows a simple three-layer architecture:
+
+```mermaid
+flowchart LR
+    U["User"] --> F["Frontend<br/>HTML + CSS + JavaScript"]
+    F -->|HTTP / REST API| A["Express.js API"]
+    A -->|SQL / pg| D[("PostgreSQL")]
+    D -->|Query Results| A
+    A -->|JSON Response| F
+    F --> U
+```
+
+### Application Flow
+
+```text
+User
+  │
+  ▼
+Frontend
+HTML / CSS / JavaScript
+  │
+  │ fetch()
+  ▼
+Express.js REST API
+  │
+  │ node-postgres
+  ▼
+PostgreSQL
+  │
+  ▼
+JSON Response
+  │
+  ▼
+Frontend UI
+```
+
+---
+
+## REST API
+
+The backend exposes the following endpoints:
+
+| Method   | Endpoint            | Description                 |
+| -------- | ------------------- | --------------------------- |
+| `GET`    | `/api/expenses`     | Retrieve all expenses       |
+| `GET`    | `/api/expenses/:id` | Retrieve a specific expense |
+| `POST`   | `/api/expenses`     | Create a new expense        |
+| `PUT`    | `/api/expenses/:id` | Update an existing expense  |
+| `DELETE` | `/api/expenses/:id` | Delete an expense           |
+
+### Example Expense Object
+
+```json
+{
+  "id": 1,
+  "title": "Lunch",
+  "amount": 12.50,
+  "category": "Food",
+  "date": "2026-09-27"
+}
+```
+
+### Supported Categories
+
+```text
+Food
+Transport
+Bills
+Entertainment
+Other
+```
+
+---
+
+## Database
+
+The application uses PostgreSQL with an `expenses` table.
+
+### Schema
+
+```mermaid
+erDiagram
+    expenses {
+        SERIAL id PK
+        VARCHAR_100 title
+        NUMERIC_10_2 amount
+        VARCHAR_20 category
+        DATE date
+    }
+```
+
+### Expense Constraints
+
+* `title` is required
+* Title cannot exceed 100 characters
+* `amount` must be greater than `0`
+* `category` must match a supported category
+* `date` is stored as a PostgreSQL `DATE`
+* Each expense has an automatically generated numeric ID
+
+---
+
+## Project Structure
 
 ```text
 Expense-Tracker-main/
+│
 ├── README.md
 ├── .gitignore
+│
 ├── backend/
-│   ├── server.js          # Express API (routes for /api/expenses)
-│   ├── schema.sql         # PostgreSQL table definition + sample data
+│   ├── server.js
+│   ├── schema.sql
 │   ├── package.json
 │   └── package-lock.json
+│
 ├── frontend/
-│   ├── index.html         # App markup (form, expenses table, filters, modals)
+│   ├── index.html
+│   │
 │   ├── css/
-│   │   └── style.css      # Styling, theming (light/dark), responsive rules
+│   │   └── style.css
+│   │
 │   └── js/
-│       └── app.js         # API calls, rendering, filters/sort, charts, CSV export
+│       └── app.js
+│
 └── screenshots/
     ├── home-desktop-light.png
     ├── home-desktop-dark.png
     └── mobile-view-dark.png
 ```
 
-## Project architecture
+### File Responsibilities
 
-```mermaid
-flowchart LR
-    subgraph Browser["Browser"]
-        FE["Frontend
-        index.html + app.js
-        (Bootstrap + Chart.js)"]
-    end
+**`frontend/index.html`**
 
-    subgraph Server["Node.js"]
-        BE["Backend
-        Express API
-        server.js — Port 3000"]
-    end
+Contains the application's structure, forms, dashboard cards, charts, expense table, filters, modals, and UI controls.
 
-    subgraph DB["PostgreSQL"]
-        T[("expenses table")]
-    end
+**`frontend/css/style.css`**
 
-    FE -- "fetch()
-    GET/POST/PUT/DELETE
-    /api/expenses" --> BE
-    BE -- "pg (node-postgres)" --> T
-    T -- "JSON data" --> BE
-    BE -- "JSON response" --> FE
-```
+Contains the application's custom styling, theme variables, dark mode, responsive behavior, component styling, and mobile-specific UI rules.
 
-## Database schema (ERD)
+**`frontend/js/app.js`**
 
-```mermaid
-erDiagram
-    expenses {
-        SERIAL id PK
-        VARCHAR_100 title "NOT NULL, cannot be empty"
-        NUMERIC_10_2 amount "NOT NULL, must be greater than 0"
-        VARCHAR_20 category "Food / Transport / Bills / Entertainment / Other"
-        DATE date "NOT NULL"
-    }
-```
+Handles:
 
-## Request flow: adding an expense
+* API communication
+* Expense CRUD operations
+* Client-side validation
+* Filtering
+* Sorting
+* Summary calculations
+* Chart rendering
+* CSV generation
+* Theme switching
+* Responsive filter interaction
+
+**`backend/server.js`**
+
+Implements the Express REST API, server-side validation, PostgreSQL queries, error handling, and database communication.
+
+**`backend/schema.sql`**
+
+Creates the PostgreSQL `expenses` table and provides sample data.
+
+---
+
+## Request Flow
+
+The following sequence illustrates how a new expense is created:
 
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant F as Frontend (app.js)
-    participant A as Backend (Express API)
+    participant F as Frontend
+    participant A as Express API
     participant D as PostgreSQL
 
-    U->>F: Fills the form and clicks "Add expense"
-    F->>F: validateForm() — local field validation
-    F->>A: POST /api/expenses (title, amount, category, date)
-    A->>A: Validates fields on the server
-    A->>D: INSERT INTO expenses ... RETURNING *
-    D-->>A: New row
-    A-->>F: 201 Created + expense JSON
-    F->>F: Updates table, summary cards, and charts
-    F-->>U: Shows the new expense + success message
+    U->>F: Submit expense form
+    F->>F: Validate input
+    F->>A: POST /api/expenses
+    A->>A: Validate request
+    A->>D: INSERT expense
+    D-->>A: Created record
+    A-->>F: 201 + JSON
+    F->>F: Update table
+    F->>F: Update summaries
+    F->>F: Update charts
+    F-->>U: Display success state
 ```
 
-## Prerequisites
+---
 
-- Node.js (any recent version, with npm)
-- PostgreSQL installed and running on your machine
-- VS Code (or any editor you prefer)
+## Getting Started
 
-## How to run the project from scratch
+### Prerequisites
 
-### 1. Create the database
+Make sure the following are installed:
 
-Open a terminal and log into PostgreSQL:
+* [Node.js](https://nodejs.org/)
+* npm
+* [PostgreSQL](https://www.postgresql.org/)
+* Git
+* A modern web browser
+* VS Code or another code editor
+
+---
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd Expense-Tracker-main
+```
+
+---
+
+### 2. Create the PostgreSQL Database
+
+Open PostgreSQL:
 
 ```bash
 psql -U postgres
 ```
 
-Then create a new database (rename it if you want):
+Create the database:
 
 ```sql
 CREATE DATABASE expense_tracker;
+```
+
+Exit PostgreSQL:
+
+```sql
 \q
 ```
 
-### 2. Run schema.sql
+---
 
-From the project's root folder:
+### 3. Initialize the Database
+
+From the project root:
 
 ```bash
 psql -U postgres -d expense_tracker -f backend/schema.sql
 ```
 
-This creates the `expenses` table and inserts some sample data. **Note:** running this file again drops the existing table and recreates it with the same sample data.
+This creates the `expenses` table and inserts the included sample data.
 
-### 3. Write the .env file
+> Running `schema.sql` again will recreate the table and reset it to the sample dataset.
 
-Inside the `backend/` folder, create a file named `.env` with your database connection details:
+---
+
+### 4. Configure Environment Variables
+
+Create a `.env` file inside the `backend/` directory:
 
 ```env
 DB_USER=postgres
@@ -141,58 +423,142 @@ DB_PASSWORD=your_postgres_password
 DB_PORT=5432
 ```
 
-> Adjust `DB_PASSWORD` and the other values to match your local PostgreSQL setup.
+Replace the values with your local PostgreSQL configuration.
 
-### 4. Install the packages
+---
 
-From inside the `backend/` folder:
+### 5. Install Backend Dependencies
 
 ```bash
 cd backend
 npm install
 ```
 
-### 5. Start the server (Backend)
+---
 
-Still inside `backend/`:
+### 6. Start the Backend
 
 ```bash
 npm start
 ```
 
-If it starts correctly you'll see in the terminal:
+The API should be available at:
 
+```text
+http://localhost:3000
 ```
+
+Expected output:
+
+```text
 Server is running on http://localhost:3000
 ```
 
-### 6. Open the frontend
+---
 
-Open `frontend/index.html` directly in your browser (double-click it), or use the Live Server extension in VS Code. Since `cors` is enabled on the backend, the frontend can talk to `http://localhost:3000` without any issues.
+### 7. Run the Frontend
 
-## Features
+Open:
 
-- [x] Add an expense (with validation on both frontend and backend)
-- [x] Delete an expense (with a confirmation dialog)
-- [x] Edit an expense (edit modal)
-- [x] Filter by category, month, and search by title
-- [x] Sort the table by any column (Title, Amount, Category, Date)
-- [x] Summary cards (total, count, highest expense)
-- [x] Charts: spending by category, and spending over time
-- [x] Export expenses as a CSV file
-- [x] Dark mode
-- [x] Data is saved in a PostgreSQL database
+```text
+frontend/index.html
+```
+
+You can either open the file directly in a browser or use the **Live Server** extension in VS Code.
+
+The frontend communicates with the Express API running on port `3000`.
+
+---
+
+## Development Notes
+
+### API Communication
+
+The frontend communicates with the backend using the browser `fetch()` API.
+
+Example:
+
+```javascript
+const response = await fetch(API_URL);
+const expenses = await response.json();
+```
+
+### Database Access
+
+The backend uses `node-postgres` to execute parameterized SQL queries against PostgreSQL.
+
+Parameterized queries are used for user-provided values to avoid directly constructing SQL statements from request data.
+
+---
 
 ## Screenshots
 
-**Home page — light mode (desktop)**
+### Desktop — Light Mode
 
-![Home page, light mode, desktop](./screenshots/home-desktop-light.png)
+![Expense Tracker desktop light mode](./screenshots/home-desktop-light.png)
 
-**Home page — dark mode (desktop)**
+### Desktop — Dark Mode
 
-![Home page, dark mode, desktop](./screenshots/home-desktop-dark.png)
+![Expense Tracker desktop dark mode](./screenshots/home-desktop-dark.png)
 
-**Mobile view — dark mode**
+### Mobile — Dark Mode
 
-![Mobile view, dark mode](./screenshots/mobile-view-dark.png)
+![Expense Tracker mobile dark mode](./screenshots/mobile-view-dark.png)
+
+---
+
+## Key Capabilities
+
+```text
+Expense CRUD
+     │
+     ├── Create
+     ├── Read
+     ├── Update
+     └── Delete
+     
+Data Analysis
+     │
+     ├── Total Spending
+     ├── Expense Count
+     ├── Highest Expense
+     ├── Category Chart
+     └── Monthly Chart
+
+Data Management
+     │
+     ├── Search
+     ├── Filtering
+     ├── Sorting
+     └── CSV Export
+
+User Experience
+     │
+     ├── Responsive UI
+     ├── Mobile Filters
+     ├── Light/Dark Mode
+     └── Validation Feedback
+```
+
+---
+
+## Future Improvements
+
+Potential extensions for the project include:
+
+* User authentication and individual expense accounts
+* Pagination for large expense datasets
+* Budget limits and spending alerts
+* Recurring expenses
+* Additional financial analytics
+* Date-range filtering
+* REST API documentation with Swagger/OpenAPI
+* Deployment using a cloud database and hosting platform
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+See the [LICENSE](./LICENSE) file for the full license text.
