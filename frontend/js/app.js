@@ -1,3 +1,5 @@
+// ===== Config & State =====
+
 const API_URL = "http://localhost:3000/api/expenses";
 
 let expenses = [];
@@ -8,6 +10,8 @@ let sortDirection = "asc";
 
 let categoryChart = null;
 let monthlyChart = null;
+
+// ===== DOM Elements =====
 
 const toggleBtn = document.getElementById("darkModeToggle");
 
@@ -87,6 +91,8 @@ const editFields = {
   date: { input: editDate, error: editDateError },
 };
 
+// ===== API =====
+
 async function getExpenses() {
   const response = await fetch(API_URL);
 
@@ -139,6 +145,8 @@ async function deleteExpense(id) {
   }
 }
 
+// ===== Refresh =====
+
 async function refresh() {
   showTableLoading();
 
@@ -161,6 +169,8 @@ async function refresh() {
     hideTableLoading();
   }
 }
+
+// ===== UI Helpers =====
 
 function setError(input, errorEl, message) {
   errorEl.textContent = message;
@@ -196,6 +206,8 @@ function showTableLoading() {
 function hideTableLoading() {
   expensesSpinnerOverlay.classList.remove("is-visible");
 }
+
+// ===== Validation =====
 
 function validateForm(fields) {
   const { title, amount, category, date } = fields;
@@ -235,6 +247,8 @@ function validateForm(fields) {
   return isValid;
 }
 
+// ===== Utils =====
+
 function setTodayDate() {
   expenseDate.value = new Date().toLocaleDateString("en-CA");
 }
@@ -247,6 +261,8 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
+
+// ===== Rendering =====
 
 function renderTable(list, emptyMessage = "No expenses yet. Add one above.") {
   if (list.length === 0) {
@@ -334,6 +350,8 @@ function renderSummary(list) {
   highestName.textContent = highest ? highest.title : "—";
 }
 
+// ===== Filter & Sort =====
+
 function filterList() {
   const categoryValue = filterCategory.value;
   const searchTitleValue = searchTitle.value.trim().toLowerCase();
@@ -417,6 +435,8 @@ function applyFilter() {
   return sorted;
 }
 
+// ===== CSV Export =====
+
 function escapeCsvValue(value) {
   const stringValue = String(value ?? "");
   return `"${stringValue.replace(/"/g, '""')}"`;
@@ -458,6 +478,8 @@ function getCurrentFilename() {
   const today = new Date().toLocaleDateString("en-CA");
   return `expenses-${today}.csv`;
 }
+
+// ===== Charts =====
 
 function getCategoryTotals(list) {
   const totals = {
@@ -733,6 +755,8 @@ function renderCharts(allExpenses, filteredList) {
   });
 }
 
+// ===== Event Listeners =====
+
 exportCsvBtn.addEventListener("click", () => {
   const filtered = filterList();
   const list = sortList(filtered);
@@ -906,6 +930,8 @@ errorAlertClose.addEventListener("click", hideAlertError);
 filterCategory.addEventListener("change", applyFilter);
 searchTitle.addEventListener("input", applyFilter);
 filterMonth.addEventListener("change", applyFilter);
+
+// ===== Init =====
 
 refresh();
 setTodayDate();
